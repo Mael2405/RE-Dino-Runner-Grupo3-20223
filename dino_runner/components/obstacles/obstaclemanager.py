@@ -14,18 +14,20 @@ class ObstacleManager:
             if random.randint(0,2) == 0:
                self.obstacles.append(Cactus("SMALL"))
             elif random.randint(0,2) == 1:
-               self.obstacles.append(Cactus("LARGE"))
-            
+               self.obstacles.append(Cactus("LARGE"))        
             elif random.randint(0,2) == 2:
                self.obstacles.append(Bird(BIRD, random.randint(200,330)))
         
         for obstacle in self.obstacles:
             obstacle.update(game.game_speed, self.obstacles)
             if game.player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(1000)
-                game.playing = False
-                game.death_count += 1
-                break
+                if not game.player.shield:
+                    pygame.time.delay(1000)
+                    game.death_count +=1
+                    game.playing = False
+                    break
+                else:
+                    self.obstacles.remove(obstacle)
 
     def draw(self, screen):
         for obstacle in self.obstacles:
